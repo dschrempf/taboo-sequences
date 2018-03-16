@@ -1,0 +1,53 @@
+name:                tabu-sequences
+version:             0.1.0.0
+github:              "dschrempf/tabu-sequences"
+license:             BSD3
+author:              "Dominik Schrempf"
+maintainer:          "dominik.schrempf@gmail.com"
+copyright:           "Dominik Schrempf (2017)"
+
+extra-source-files:
+- README.md
+- ChangeLog.md
+
+# Metadata used when publishing your package
+# synopsis:            Short description of your package
+# category:            Web
+
+# To avoid duplicated efforts in documentation and dealing with the
+# complications of embedding Haddock markup inside cabal files, it is
+# common to point users to the README.md file.
+description:         Please see the README on Github at <https://github.com/dschrempf/tabu-sequences#readme>
+
+dependencies:
+- base >= 4.7 && < 5
+- attoparsec >= 0.13.2.2
+- MonadRandom >= 0.5.1
+- lens >= 4.15.4
+- QuickCheck >= 2.10.1
+- pretty-show >= 1.6.16
+
+library:
+  source-dirs: src
+
+executables:
+  tabu-sequences-exe:
+    main:                Main.hs
+    source-dirs:         app
+    ghc-options:
+    - -threaded
+    - -rtsopts
+    - -with-rtsopts=-N
+    dependencies:
+    - tabu-sequences
+
+tests:
+  tabu-sequences-test:
+    main:                Spec.hs
+    source-dirs:         test
+    ghc-options:
+    - -threaded
+    - -rtsopts
+    - -with-rtsopts=-N
+    dependencies:
+    - tabu-sequences
