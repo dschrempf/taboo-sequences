@@ -8,7 +8,7 @@ main :: IO ()
 main = do
   let
     -- State spaces for tabu sequences.
-    !ss = map stateSpace [1..27]
+    !ss = map stateSpacePeriodic [1..27]
     -- State space sizes of tabu sequences.
     !cs = map length ss
     -- Average usage of Ones.

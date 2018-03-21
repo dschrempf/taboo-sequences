@@ -24,6 +24,8 @@ module TabuSequence
   , stateSpacePeriodic
   , totalAverage
   , averageDistance
+  , onesCountsPerSite
+  , onesProbPerSite
   , flipSeq
   , connected
   , distance
@@ -96,6 +98,18 @@ average s@(Seq ss) = fromIntegral (ones s)  / fromIntegral (length ss)
 -- | Number of Ones in a sequence.
 ones :: Seq -> Int
 ones (Seq ss) = length . filter (== One) $ ss
+
+-- | Count the number of Ones per site.
+onesCountsPerSite :: [Seq] -> [Int]
+onesCountsPerSite seqS = [countOnes (nTh l) | l <- [0.. length (getSeq $ head seqS) - 1 ]] where
+  ss = map getSeq seqS
+  nTh n = map (!! n) ss
+  countOnes = length . filter (== One)
+
+-- | Return the probability of having a One per site.
+onesProbPerSite :: [Seq] -> [Double]
+onesProbPerSite ss = map ((/ fromIntegral n) . fromIntegral) (onesCountsPerSite ss) where
+  n = length ss
 
 -- | Average distance.
 averageDistance :: [Seq] -> Double
