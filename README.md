@@ -1,1 +1,1 @@
-# tabu-sequences
+# Taboo sequences

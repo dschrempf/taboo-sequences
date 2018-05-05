@@ -1,5 +1,5 @@
 {- |
-   Description :  Tabu sequence states
+   Description :  Taboo sequence states
    Copyright   :  (c) Dominik Schrempf 2017
    License     :  GPL-3
 
@@ -9,12 +9,12 @@
 
 Creation date: Wed Feb  7 18:39:43 2018.
 
-Definition of tabu sequence states and related functions.
+Definition of taboo sequence states and related functions.
 
 -}
 
 
-module TabuSequenceState
+module TabooSequenceState
   ( State(..)
   , pState
   , flipState
@@ -50,7 +50,7 @@ pState = choice [char '0', char '1'] >>= check where
   check _   = error "State is binary, 0 or 1."
 
 
--- | Flip the tabu sequence state.
+-- | Flip the taboo sequence state.
 flipState :: State -> State
 flipState Zero = One
 flipState One  = Zero

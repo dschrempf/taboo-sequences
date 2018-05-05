@@ -1,6 +1,6 @@
 {-# LANGUAGE TemplateHaskell #-}
 {- |
-   Description :  Test my tabu sequences
+   Description :  Test my taboo sequences
    Copyright   :  (c) Dominik Schrempf 2017
    License     :  GPL-3
 

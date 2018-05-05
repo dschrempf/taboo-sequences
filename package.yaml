@@ -1,6 +1,6 @@
-name:                tabu-sequences
+name:                taboo-sequences
 version:             0.1.0.0
-github:              "dschrempf/tabu-sequences"
+github:              "dschrempf/taboo-sequences"
 license:             BSD3
 author:              "Dominik Schrempf"
 maintainer:          "dominik.schrempf@gmail.com"
@@ -17,7 +17,7 @@ extra-source-files:
 # To avoid duplicated efforts in documentation and dealing with the
 # complications of embedding Haddock markup inside cabal files, it is
 # common to point users to the README.md file.
-description:         Please see the README on Github at <https://github.com/dschrempf/tabu-sequences#readme>
+description:         Please see the README on Github at <https://github.com/dschrempf/taboo-sequences#readme>
 
 dependencies:
 - base >= 4.7 && < 5
@@ -31,7 +31,7 @@ library:
   source-dirs: src
 
 executables:
-  tabu-sequences-exe:
+  taboo-sequences-exe:
     main:                Main.hs
     source-dirs:         app
     ghc-options:
@@ -39,10 +39,10 @@ executables:
     - -rtsopts
     - -with-rtsopts=-N
     dependencies:
-    - tabu-sequences
+    - taboo-sequences
 
 tests:
-  tabu-sequences-test:
+  taboo-sequences-test:
     main:                Spec.hs
     source-dirs:         test
     ghc-options:
@@ -50,4 +50,4 @@ tests:
     - -rtsopts
     - -with-rtsopts=-N
     dependencies:
-    - tabu-sequences
+    - taboo-sequences

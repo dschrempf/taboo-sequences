@@ -1,3 +1,3 @@
-# Changelog for tabu-sequences
+# Changelog for taboo-sequences
 
 ## Unreleased changes

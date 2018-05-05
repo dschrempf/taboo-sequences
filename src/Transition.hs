@@ -1,5 +1,5 @@
 {- |
-   Description :  Transition from one tabu sequence to another
+   Description :  Transition from one taboo sequence to another
    Copyright   :  (c) Dominik Schrempf 2017
    License     :  GPL-3
 
@@ -9,7 +9,7 @@
 
 Creation date: Wed Feb  7 18:08:15 2018.
 
-Function to move between tabu sequences.
+Function to move between taboo sequences.
 
 * Changelog
 
@@ -17,7 +17,7 @@ Function to move between tabu sequences.
 
 module Transition where
 
-import TabuSequence
+import TabooSequence
 import Control.Monad.Random.Strict
 
 -- | Move from one sequence to another.

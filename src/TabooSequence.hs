@@ -1,5 +1,5 @@
 {- |
-Description :  Tabu sequences
+Description :  Taboo sequences
 Copyright   :  (c) Dominik Schrempf 2018
 License     :  GPL-3
 
@@ -9,13 +9,13 @@ Portability :  portable
 
 Creation date: Thu Mar 15 14:39:33 2018.
 
-What are tabu sequences? How can we parse them? How can we manipulate them? All
+What are taboo sequences? How can we parse them? How can we manipulate them? All
 of these questions are answered here.
 
 -}
 
 
-module TabuSequence
+module TabooSequence
   ( Seq(..)
   , pSeq
   , valid
@@ -26,19 +26,23 @@ module TabuSequence
   , averageDistance
   , onesCountsPerSite
   , onesProbPerSite
+  , onesPerSequence
   , flipSeq
   , connected
   , distance
+  , getLength
   ) where
 
 import Control.Applicative
 import Control.Lens
 import Control.Monad
-import Data.Attoparsec.Text
-import TabuSequenceState
+import qualified Data.Attoparsec.Text as A
+import Data.List
+import Data.Maybe
+import TabooSequenceState
 import Test.QuickCheck
 
--- | A tabu sequence is a list of binary sites.
+-- | A taboo sequence is a list of binary sites.
 newtype Seq = Seq { getSeq :: [State] } deriving (Eq)
 
 instance Show Seq where
@@ -54,13 +58,13 @@ instance Arbitrary Seq where
   arbitrary = Seq . dropDoubleZeroes <$> sized arbitrary' where
     arbitrary' n = replicateM n arbitrary
 
--- | A tabu sequence is any number of tabu sequence states.
-pSeq :: Parser Seq
+-- | A taboo sequence is any number of taboo sequence states.
+pSeq :: A.Parser Seq
 pSeq = many pState >>= checkValidity where
   checkValidity states | valid (Seq states)  = return $ Seq states
                        | otherwise = error "Seq contains two consecutive zeroes and is not valid."
 
--- | Is a tabu sequence valid?
+-- | Is a taboo sequence valid?
 valid :: Seq -> Bool
 valid (Seq (x:y:xs))
   | (x == Zero) && (y == Zero) = False
@@ -68,17 +72,23 @@ valid (Seq (x:y:xs))
 valid (Seq [_]) = True
 valid _ = False
 
--- | Is a tabu sequence with periodic boundary condition valid?
+-- | Is a taboo sequence with periodic boundary condition valid?
 validPeriodic :: Seq -> Bool
 validPeriodic s@(Seq ss@(x:_)) = not headAndLastZero && valid s where
   headAndLastZero = all (== Zero) [x, last ss]
 validPeriodic _ = False
 
--- | Get all tabu sequences of specific length.
+-- | Check if lengths of given taboo sequences are equal and return length.
+getLength :: [Seq] -> Maybe Int
+getLength [] = error "No sequence given."
+getLength ss = if length ls == 1 then Just (head ls) else Nothing where
+  ls = nub $ map (length . getSeq) ss
+
+-- | Get all taboo sequences of specific length.
 stateSpace :: Int -> [Seq]
 stateSpace n = filter valid $ map Seq $ stateSpace' n
 
--- | Get all tabu sequences of specific length and with periodic boundary conditions.
+-- | Get all taboo sequences of specific length and with periodic boundary conditions.
 stateSpacePeriodic :: Int -> [Seq]
 stateSpacePeriodic n = filter validPeriodic $ map Seq $ stateSpace' n
 
@@ -106,17 +116,25 @@ onesCountsPerSite seqS = [countOnes (nTh l) | l <- [0.. length (getSeq $ head se
   nTh n = map (!! n) ss
   countOnes = length . filter (== One)
 
--- | Return the probability of having a One per site.
+-- | Probability of having a One per site.
 onesProbPerSite :: [Seq] -> [Double]
 onesProbPerSite ss = map ((/ fromIntegral n) . fromIntegral) (onesCountsPerSite ss) where
   n = length ss
+
+-- | How many sequences have 0, 1, 2, ... Ones?
+onesPerSequence :: [Seq] -> [Int]
+onesPerSequence ss = foldl update zeroes nOnesList where
+  nOnesList = map ones ss
+  l = fromMaybe (error "Lengths vary.") (getLength ss)
+  zeroes = replicate (l+1) (0 :: Int)
+  update xs i = take i xs ++ [(xs !! i) + 1] ++ drop (i + 1) xs
 
 -- | Average distance.
 averageDistance :: [Seq] -> Double
 averageDistance ss = 2*(1-a)*a where
   a = totalAverage ss
 
--- | Flip the ith state of a tabu sequence. Here it might be computationally be
+-- | Flip the ith state of a taboo sequence. Here it might be computationally be
 -- better to check if flipping is possible before actually flipping.
 flipSeq :: Int -> Seq -> Maybe Seq
 flipSeq i (Seq ss) =
